@@ -50,8 +50,9 @@ namespace AlgorithmsDataStructures2
 
         public BSTFind<T> FindNodeByKey(int key)
         {
-            // ищем в дереве узел и сопутствующую информацию по ключу
             BSTFind<T> bstFind = new();
+
+            // ищем в дереве узел и сопутствующую информацию по ключу
 
             BSTNode<T> node = Root;
             while (node != null)
@@ -80,6 +81,12 @@ namespace AlgorithmsDataStructures2
 
         public bool AddKeyValue(int key, T val)
         {
+            if (Root == null)
+            {
+                Root = new BSTNode<T>(key, val, null);
+                return true;
+            }
+            
             // добавляем ключ-значение в дерево
             var bstFind = FindNodeByKey(key);
 
