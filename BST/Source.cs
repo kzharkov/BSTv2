@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AlgorithmsDataStructures2
 {
@@ -86,7 +87,7 @@ namespace AlgorithmsDataStructures2
                 Root = new BSTNode<T>(key, val, null);
                 return true;
             }
-            
+
             // добавляем ключ-значение в дерево
             var bstFind = FindNodeByKey(key);
 
@@ -158,7 +159,7 @@ namespace AlgorithmsDataStructures2
                     Root = deletedNode.LeftChild;
                     return true;
                 }
-                
+
                 if (deletedNode.Parent.LeftChild == deletedNode)
                 {
                     deletedNode.Parent.LeftChild = deletedNode.LeftChild;
@@ -248,6 +249,90 @@ namespace AlgorithmsDataStructures2
             }
 
             return count;
+        }
+
+        public List<BSTNode<T>> WideAllNodes()
+        {
+            var result = new List<BSTNode<T>>();
+
+            if (Root == null)
+            {
+                return result;
+            }
+
+            var nodes = new List<BSTNode<T>>();
+
+            nodes.Add(Root);
+
+            while (nodes.Count != 0)
+            {
+                result.AddRange(nodes);
+
+                List<BSTNode<T>> nextNodes = new List<BSTNode<T>>();
+
+                foreach (var node in nodes)
+                {
+                    if (node.LeftChild != null)
+                    {
+                        nextNodes.Add(node.LeftChild);
+                    }
+
+                    if (node.RightChild != null)
+                    {
+                        nextNodes.Add(node.RightChild);
+                    }
+                }
+
+                nodes = nextNodes;
+            }
+
+            return result;
+        }
+
+        public List<BSTNode<T>> DeepAllNodes(int order)
+        {
+            // 0 - in-order
+            // 1 - post-order
+            // 2 - pre-order
+
+            if (Root == null)
+            {
+                return new List<BSTNode<T>>();
+            }
+
+            return DeepAllNodesHelper(Root, order);
+        }
+
+        private List<BSTNode<T>> DeepAllNodesHelper(BSTNode<T> node, int order)
+        {
+            var result = new List<BSTNode<T>>();
+
+            if (order == 2)
+            {
+                result.Add(node);
+            }
+
+            if (node.LeftChild != null)
+            {
+                result.AddRange(DeepAllNodesHelper(node.LeftChild, order));
+            }
+            
+            if (order == 0)
+            {
+                result.Add(node);
+            }
+            
+            if (node.RightChild != null)
+            {
+                result.AddRange(DeepAllNodesHelper(node.RightChild, order));
+            }
+            
+            if (order == 1)
+            {
+                result.Add(node);
+            }
+
+            return result;
         }
     }
 }
